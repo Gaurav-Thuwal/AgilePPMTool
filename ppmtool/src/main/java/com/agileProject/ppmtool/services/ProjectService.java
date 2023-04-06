@@ -3,8 +3,10 @@ package com.agileProject.ppmtool.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.agileProject.ppmtool.domain.Backlog;
 import com.agileProject.ppmtool.domain.Project;
 import com.agileProject.ppmtool.exceptions.ProjectIdException;
+import com.agileProject.ppmtool.repositories.BacklogRepository;
 import com.agileProject.ppmtool.repositories.ProjectRepository;
 
 @Service
@@ -17,13 +19,28 @@ public class ProjectService {
 		this.projectRepository = projectRepository;
 	}
 	
+	@Autowired
+	public BacklogRepository backlogRepository;
+	
 	public Project saveOrUpdateProject(Project project) {
 		//logic
+		String projectId = project.getProjectIdentifier().toUpperCase();
 		try {
-			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			project.setProjectIdentifier(projectId);
+			
+			if(project.getId() == null) {
+				Backlog backlog = new Backlog();
+				project.setBacklog(backlog);
+				backlog.setProject(project);
+				backlog.setProjectIdentifier(projectId);
+			}
+			if(project.getId() != null) {
+				project.setBacklog(backlogRepository.findByProjectIdentifier(projectId));
+			}
+			
 			return projectRepository.save(project);
 		}catch(Exception e){
-			throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
+			throw new ProjectIdException("Project ID '"+projectId+"' already exists");
 		}
 	}
 	
