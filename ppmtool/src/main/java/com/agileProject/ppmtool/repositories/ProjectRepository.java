@@ -7,8 +7,9 @@ import com.agileProject.ppmtool.domain.Project;
 
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
-	@Override
-	Iterable<Project> findAll();
-	
-	Project findByProjectIdentifier(String projectId);
+
+    Project findByProjectIdentifier(String projectId);
+
+    @Override
+    Iterable<Project> findAll();
 }

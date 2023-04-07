@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.agileProject.ppmtool.domain.ProjectTask;
 
 @Repository
-public interface ProjectTaskRepository extends CrudRepository<ProjectTask, Long>{
-	
-	List<ProjectTask> findByProjectIdentifierOrderByPriority(String id);
+public interface ProjectTaskRepository extends CrudRepository<ProjectTask, Long> {
 
-	ProjectTask findByProjectSequence(String sequence);
+    List<ProjectTask> findByProjectIdentifierOrderByPriority(String id);
+
+    ProjectTask findByProjectSequence(String sequence);
 }

@@ -12,58 +12,62 @@ import com.agileProject.ppmtool.repositories.ProjectRepository;
 @Service
 public class ProjectService {
 
-	@Autowired
-	private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
-	public ProjectService(ProjectRepository projectRepository) {
-		this.projectRepository = projectRepository;
-	}
-	
-	@Autowired
-	public BacklogRepository backlogRepository;
-	
-	public Project saveOrUpdateProject(Project project) {
-		//logic
-		String projectId = project.getProjectIdentifier().toUpperCase();
-		try {
-			project.setProjectIdentifier(projectId);
-			
-			if(project.getId() == null) {
-				Backlog backlog = new Backlog();
-				project.setBacklog(backlog);
-				backlog.setProject(project);
-				backlog.setProjectIdentifier(projectId);
-			}
-			if(project.getId() != null) {
-				project.setBacklog(backlogRepository.findByProjectIdentifier(projectId));
-			}
-			
-			return projectRepository.save(project);
-		}catch(Exception e){
-			throw new ProjectIdException("Project ID '"+projectId+"' already exists");
-		}
-	}
-	
-	public Project findProjectByIdentifier(String projectId) {
-		Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-		
-		if(project == null) {
-			throw new ProjectIdException("Project ID '"+projectId.toUpperCase()+"' does not exists");
-		}
-		
-		return project;
-	}
-	
-	public Iterable<Project> findAllProjects(){
-		return projectRepository.findAll();
-	}
-	
-	public void deleteProjectByIdentifier(String projectId) {
-		Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-		if(project == null) {
-			throw new ProjectIdException("Cannot find a project with Project ID '"+projectId.toUpperCase());
-		}
-		projectRepository.delete(project);
-	}
-	
+    @Autowired
+    private BacklogRepository backlogRepository;
+
+    public Project saveOrUpdateProject(Project project){
+        try{
+            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            if(project.getId()==null){
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }
+
+            if(project.getId()!=null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+
+            return projectRepository.save(project);
+
+        }catch (Exception e){
+            throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
+        }
+
+    }
+
+
+    public Project findProjectByIdentifier(String projectId){
+
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+
+        if(project == null){
+            throw new ProjectIdException("Project ID '"+projectId+"' does not exist");
+
+        }
+
+
+        return project;
+    }
+
+    public Iterable<Project> findAllProjects(){
+        return projectRepository.findAll();
+    }
+
+
+    public void deleteProjectByIdentifier(String projectid){
+        Project project = projectRepository.findByProjectIdentifier(projectid.toUpperCase());
+
+        if(project == null){
+            throw  new  ProjectIdException("Cannot Project with ID '"+projectid+"'. This project does not exist");
+        }
+
+        projectRepository.delete(project);
+    }
+
 }

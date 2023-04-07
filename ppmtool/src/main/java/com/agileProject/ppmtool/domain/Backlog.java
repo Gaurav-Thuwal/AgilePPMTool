@@ -21,21 +21,21 @@ public class Backlog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private Integer PTsequence = 0;
-	
+	private Integer PTSequence = 0;
 	private String projectIdentifier;
 
-	//OnToOne with project
+	// OneToOne with project
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="project_id", nullable = false)
+	@JoinColumn(name = "project_id", nullable = false)
 	@JsonIgnore
 	private Project project;
-	
-	//OneToMany with ProjectTask
+
+	// OneToMany with ProjectTask
 	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
 	private List<ProjectTask> projectTasks = new ArrayList<>();
-	
+	// Cascade REFRESH
+	// ORPHAN REMOVAL
+
 	public Backlog() {
 	}
 
@@ -47,17 +47,22 @@ public class Backlog {
 		this.id = id;
 	}
 
-	public Integer getPTsequence() {
-		return PTsequence;
+	public Integer getPTSequence() {
+		return PTSequence;
 	}
 
-	public void setPTsequence(Integer pTsequence) {
-		PTsequence = pTsequence;
+	public void setPTSequence(Integer PTSequence) {
+		this.PTSequence = PTSequence;
 	}
 
 	public String getProjectIdentifier() {
 		return projectIdentifier;
 	}
+
+	public void setProjectIdentifier(String projectIdentifier) {
+		this.projectIdentifier = projectIdentifier;
+	}
+
 	public Project getProject() {
 		return project;
 	}
@@ -66,11 +71,6 @@ public class Backlog {
 		this.project = project;
 	}
 
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
-	
-
 	public List<ProjectTask> getProjectTasks() {
 		return projectTasks;
 	}
@@ -78,13 +78,4 @@ public class Backlog {
 	public void setProjectTasks(List<ProjectTask> projectTasks) {
 		this.projectTasks = projectTasks;
 	}
-
-	public Backlog(Long id, Integer pTsequence, String projectIdentifier) {
-		this.id = id;
-		PTsequence = pTsequence;
-		this.projectIdentifier = projectIdentifier;
-	}
-	
-	
-	
 }
