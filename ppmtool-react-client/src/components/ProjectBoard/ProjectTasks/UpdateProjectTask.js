@@ -162,6 +162,7 @@ class UpdateProjectTask extends Component {
                                 <input
                                     type="submit"
                                     className="btn btn-primary btn-block mt-4"
+                                    value="Submit"
                                 />
                             </form>
                         </div>
